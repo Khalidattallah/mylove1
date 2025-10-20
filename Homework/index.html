@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="ar">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>ريحة البن</title>
+    <style>
+      :root {
+        --bg: #fffaf6;
+        --card: #ffffff;
+        --accent: #e84a5f;
+        --muted: #6b6b6b;
+      }
+      body {
+        font-family: system-ui, Segoe UI, Roboto, "Noto Sans Arabic", sans-serif;
+        background: linear-gradient(180deg, #fffaf6 0%, #f7f1ea 100%);
+        margin: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        color: #222;
+      }
+      .card {
+        width: min(720px, 92%);
+        background: var(--card);
+        border-radius: 16px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        padding: 28px;
+        display: grid;
+        grid-template-columns: 1fr 220px;
+        gap: 20px;
+        align-items: center;
+      }
+      .left h1 {
+        margin: 0;
+        font-size: 1.6rem;
+      }
+      .left p {
+        color: var(--muted);
+        margin: 10px 0 18px;
+      }
+      .heart {
+        width: 64px;
+        height: 64px;
+        margin: auto;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        position: relative;
+      }
+      .heart .shape {
+        font-size: 34px;
+        color: var(--accent);
+        transform-origin: center;
+        display: inline-block;
+        animation: beat 1.2s infinite both;
+      }
+      @keyframes beat {
+        0% {
+          transform: scale(1);
+        }
+        25% {
+          transform: scale(1.14);
+        }
+        50% {
+          transform: scale(1);
+        }
+        75% {
+          transform: scale(1.06);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+      .btn {
+        background: #222;
+        color: #fff;
+        padding: 10px 14px;
+        border-radius: 10px;
+        border: 0;
+        cursor: pointer;
+        font-weight: 600;
+      }
+      .small {
+        font-size: 0.9rem;
+        color: #666;
+      }
+      /* modal */
+      .overlay {
+        position: fixed;
+        inset: 0;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        background: rgba(0, 0, 0, 0.35);
+        z-index: 50;
+      }
+      .modal {
+        background: white;
+        padding: 20px;
+        border-radius: 12px;
+        max-width: 440px;
+        width: 92%;
+        text-align: center;
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+      }
+      .typed {
+        min-height: 56px;
+        font-size: 1rem;
+        line-height: 1.4;
+        color: #222;
+      }
+      .conf {
+        position: absolute;
+        pointer-events: none;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+      }
+      .conf span {
+        position: absolute;
+        font-size: 20px;
+        opacity: 0;
+        transform: translateY(0);
+        animation: pop 900ms ease-out forwards;
+      }
+      @keyframes pop {
+        0% {
+          opacity: 0;
+          transform: translateY(-10px) scale(0.8);
+        }
+        50% {
+          opacity: 1;
+          transform: translateY(6px) scale(1.05);
+        }
+        100% {
+          opacity: 0;
+          transform: translateY(20px) scale(0.9);
+        }
+      }
+      footer {
+        grid-column: 1/-1;
+        margin-top: 14px;
+        color: var(--muted);
+        font-size: 0.85rem;
+      }
+      @media (max-width: 680px) {
+        .card {
+          grid-template-columns: 1fr;
+          padding: 20px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <div class="left">
+        <h1>" أهلاً بيك في الونسة الحلوة يا<span id="herName">تنو</span></h1>
+        <p class="small">
+          " ,قبل ما تضغطي الزر دا، خدي نفس عميق 😌 يمكن الكلام الجاي يدوخك شويه
+          لكن وعد… ما تلوميني 😅
+        </p>
+
+        <div style="display: flex; gap: 10px; align-items: center">
+          <button class="btn" id="openBtn">اضغط اوريك سر خفيف</button>
+          <button class="btn" id="coffeeBtn" style="background: #6b4fcb">
+            أجهز ليك جبنة
+          </button>
+        </div>
+
+        <p style="margin-top: 18px; color: var(--muted)">
+          ملاحظة: اضغطي على القلب فوق مرتين لو حابة تكشفي مفاجأة تانية 😉
+        </p>
+      </div>
+
+      <div class="right" style="text-align: center">
+        <div class="heart" id="heart" title="دبوس الحنية">
+          <div class="shape">❤</div>
+        </div>
+        <div style="margin-top: 8px; color: var(--muted)">قلب صغير لليوم</div>
+      </div>
+
+      <footer>
+        لو حبيتي تحفظي الصفحة: اضغطي Ctrl+S أو أرسلي الرابط لي وعندي نسخة على
+        GitHub Pagesاليوم ده خاص… لأنك في بالي – 21 أكتوبر 2025.
+      </footer>
+    </div>
+
+    <!-- modal -->
+    <div class="overlay" id="overlay">
+      <div class="modal">
+        <div class="typed" id="typed"></div>
+        <div style="margin-top: 14px">
+          <button class="btn" id="closeBtn">تمام</button>
+        </div>
+        <div class="conf" id="confetti"></div>
+      </div>
+    </div>
+
+    <script>
+      const openBtn = document.getElementById("openBtn");
+      const overlay = document.getElementById("overlay");
+      const typed = document.getElementById("typed");
+      const closeBtn = document.getElementById("closeBtn");
+      const heart = document.getElementById("heart");
+      const coffeeBtn = document.getElementById("coffeeBtn");
+      const confetti = document.getElementById("confetti");
+      const herName = document.getElementById("herName");
+
+      // لو داير تغيّر الاسم بسرعة
+      // herName.textContent = "اسمها";
+
+      openBtn.addEventListener("click", () => {
+        showModalWithText(
+          "ما كان في طريقة أقولها ليك وجهاً لوجه،  لكن كان لازم تعرفي…   بحبك، وبس.   بهدوء، وبصدق، وبطريقة تشبهني وتشبهك."
+        );
+      });
+
+      function showModalWithText(text) {
+        overlay.style.display = "flex";
+        typed.textContent = "";
+        typeWriter(text, typed, 0, 35, () => fireConfetti());
+      }
+
+      closeBtn.addEventListener(
+        "click",
+        () => (overlay.style.display = "none")
+      );
+      overlay.addEventListener("click", (e) => {
+        if (e.target === overlay) overlay.style.display = "none";
+      });
+
+      // double-click heart to reveal secret
+      let clicks = 0,
+        last = 0;
+      heart.addEventListener("click", () => {
+        const now = Date.now();
+        if (now - last < 450) clicks++;
+        else clicks = 1;
+        last = now;
+        if (clicks >= 2) {
+          showModalWithText("❤️بحبك يا مجنونة ");
+          clicks = 0;
+        } else {
+          // small pulse feedback
+          heart.querySelector(".shape").style.transform = "scale(1.25)";
+          setTimeout(
+            () => (heart.querySelector(".shape").style.transform = "scale(1)"),
+            220
+          );
+        }
+      });
+
+      // coffee button small playful action
+      coffeeBtn.addEventListener("click", () => {
+        showModalWithText(
+          "أها، الجبنة على النار 😌  ريحتها مالية المكان، بس ناقص ضحكتك تعالي… القعدة ما بتكمل بدونك ☕❤️"
+        );
+      });
+
+      // typewriter effect
+      function typeWriter(text, el, i, speed, cb) {
+        if (i < text.length) {
+          el.textContent += text.charAt(i);
+          setTimeout(() => typeWriter(text, el, i + 1, speed, cb), speed);
+        } else cb && cb();
+      }
+
+      // simple confetti with emojis
+      function fireConfetti() {
+        confetti.innerHTML = "";
+        const emojis = ["✨", "🎉", "💫", "☕", "❤"];
+        for (let i = 0; i < 18; i++) {
+          const s = document.createElement("span");
+          s.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+          s.style.left = Math.random() * 100 + "%";
+          s.style.top = 10 + Math.random() * 60 + "%";
+          s.style.fontSize = 12 + Math.random() * 18 + "px";
+          confetti.appendChild(s);
+          (function (el) {
+            setTimeout(() => el.remove(), 1200);
+          })(s);
+        }
+      }
+    </script>
+  </body>
+</html>
